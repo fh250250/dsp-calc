@@ -211,7 +211,7 @@ export function Result({needs_list, set_needs_list}) {
 
     const produceUnits = []; // 生产单元
     let result_table_rows = [];
-    for (let i in result_dict) {        
+    for (let i in result_dict) {
         side_products[i] = side_products[i] || {};
         let total = result_dict[i] + Object.values(side_products[i]).reduce((a, b) => a + b, 0);
         if (total < 1e-6) continue;
@@ -352,17 +352,17 @@ export function Result({needs_list, set_needs_list}) {
             produceUnit.theoryOutput += produceUnit.sideProducts[item]; // 输出数量+副产数量
         }
         /////////////// end add by lian.zt ///////////////
-    } 
-    
-    // add by lian.zt 
+    }
+
+    // add by lian.zt
     const textareaRef = useRef(null);
     // 首先在组件顶部添加一个状态来存储传送带利用率
     const [beltUtilization, setBeltUtilization] = useState(null);
-    
+
     const handleGenerate = (allProduceUnits, surplusList, produces) => {
         try{
-            const buleprint = handleCalculate(allProduceUnits, surplusList, produces);
-            const blueprintStr = generateBlueprint(buleprint);
+            const blueprint = handleCalculate(allProduceUnits, surplusList, produces);
+            const blueprintStr = generateBlueprint(blueprint);
             if (textareaRef.current) {
                 textareaRef.current.value = blueprintStr;
             }
@@ -371,7 +371,7 @@ export function Result({needs_list, set_needs_list}) {
             textareaRef.current.value = e.message;
         }
     };
-    
+
     // 修改计算按钮的处理函数
     const handleCalculate = (allProduceUnits, surplusList, produces) => {
         // 获取各项配置
@@ -398,23 +398,23 @@ export function Result({needs_list, set_needs_list}) {
             "堆叠": stackSize,
             "增产点数": proNum
         });
-        
+
         // 计算传送带利用率
-        const buleprint = computeBlueprint({
-            allProduceUnits, 
-            surplusList, 
-            produces, 
-            beltType, 
-            insertType, 
-            recycleMode, 
-            rows, 
+        const blueprint = computeBlueprint({
+            allProduceUnits,
+            surplusList,
+            produces,
+            beltType,
+            insertType,
+            recycleMode,
+            rows,
             stackSize,
             floor,
             stationPiler, // 传入物流站参数
             proNum // 传入增产点数参数
         });
-        setBeltUtilization(`${buleprint.belt.beltUsageRate}% x ${buleprint.belt.belts.length}`);
-        return buleprint;
+        setBeltUtilization(`${blueprint.belt.beltUsageRate}% x ${blueprint.belt.belts.length}`);
+        return blueprint;
     };
     /////////////// end add by lian.zt ///////////////
 
@@ -509,7 +509,7 @@ export function Result({needs_list, set_needs_list}) {
                 </fieldset>}
 
             {/* add by lian.zt 生成蓝图 */}
-            {produceUnits.length > 0 && 
+            {produceUnits.length > 0 &&
             <>
                 <fieldset className="w-fit">
                     <legend><small>生成蓝图</small></legend>
@@ -520,8 +520,8 @@ export function Result({needs_list, set_needs_list}) {
                                 <span className="ms-auto me-1">传送带</span>
                             </td>
                             <td className="ps-2 text-nowrap">
-                                <HorizontalMultiButtonSelect 
-                                    choice={scheme_data.scheme_for_recipe["传送带"] || 0} 
+                                <HorizontalMultiButtonSelect
+                                    choice={scheme_data.scheme_for_recipe["传送带"] || 0}
                                     options={[
                                         {value: 0, item_icon: "传送带"},
                                         {value: 1, item_icon: "高速传送带"},
@@ -545,8 +545,8 @@ export function Result({needs_list, set_needs_list}) {
                                 <span className="ms-auto me-1">分拣器</span>
                             </td>
                             <td className="ps-2 text-nowrap">
-                                <HorizontalMultiButtonSelect 
-                                    choice={scheme_data.scheme_for_recipe["分拣器"] || 0} 
+                                <HorizontalMultiButtonSelect
+                                    choice={scheme_data.scheme_for_recipe["分拣器"] || 0}
                                     options={[
                                         {value: 0, item_icon: "分拣器"},
                                         {value: 1, item_icon: "高速分拣器"},
@@ -569,8 +569,8 @@ export function Result({needs_list, set_needs_list}) {
                                 <span className="ms-auto me-1">回收</span>
                             </td>
                             <td className="ps-2 text-nowrap">
-                                <HorizontalMultiButtonSelect 
-                                    choice={scheme_data.scheme_for_recipe["回收"] || 1} 
+                                <HorizontalMultiButtonSelect
+                                    choice={scheme_data.scheme_for_recipe["回收"] || 1}
                                     options={[
                                         {value: 2, item_icon: "四向分流器"},
                                         {value: 1, item_icon: "集装分拣器"}
@@ -593,8 +593,8 @@ export function Result({needs_list, set_needs_list}) {
                                         <span className="ms-auto me-1">行数</span>
                                     </td>
                                     <td className="ps-2 text-nowrap">
-                                        <HorizontalMultiButtonSelect 
-                                            choice={scheme_data.scheme_for_recipe["行数"] || 1} 
+                                        <HorizontalMultiButtonSelect
+                                            choice={scheme_data.scheme_for_recipe["行数"] || 1}
                                             options={[
                                                 {value: 1, label: "1"},
                                                 {value: 2, label: "2"},
@@ -618,8 +618,8 @@ export function Result({needs_list, set_needs_list}) {
                                         <span className="ms-auto me-1">堆叠</span>
                                     </td>
                                     <td className="ps-2 text-nowrap">
-                                        <HorizontalMultiButtonSelect 
-                                            choice={scheme_data.scheme_for_recipe["物流站"] === 1 ? 4 : (scheme_data.scheme_for_recipe["堆叠"] || 1)} 
+                                        <HorizontalMultiButtonSelect
+                                            choice={scheme_data.scheme_for_recipe["物流站"] === 1 ? 4 : (scheme_data.scheme_for_recipe["堆叠"] || 1)}
                                             options={[
                                                 {value: 1, label: "1"},
                                                 {value: 2, label: "2"},
@@ -643,7 +643,7 @@ export function Result({needs_list, set_needs_list}) {
                                         <span className="ms-auto me-1">层高</span>
                                     </td>
                                     <td className="ps-2 text-nowrap">
-                                        <select 
+                                        <select
                                             value={scheme_data.scheme_for_recipe["层高"] || 15}
                                             onChange={(e) => {
                                                 set_scheme_data(old_scheme_data => {
@@ -668,7 +668,7 @@ export function Result({needs_list, set_needs_list}) {
                                         <span className="ms-auto me-1">物流站</span>
                                     </td>
                                     <td className="ps-2 text-nowrap">
-                                        <HorizontalMultiButtonSelect 
+                                        <HorizontalMultiButtonSelect
                                             choice={scheme_data.scheme_for_recipe["物流站"] || 2}
                                             options={[
                                                 {value: 1, label: "4集装"},
@@ -706,11 +706,11 @@ export function Result({needs_list, set_needs_list}) {
                             <button className="btn btn-primary btn-sm text-nowrap px-4"
                                 onClick={() => handleGenerate(produceUnits, lp_surplus_list, needs_list)}>
                                 <div>生成</div>
-                            </button>    
+                            </button>
                         </div>
                         <div className="mt-2">
-                            <textarea ref={textareaRef} rows="5" cols="20" readOnly onclick="this.select()"/>
-                        </div>  
+                            <textarea ref={textareaRef} rows="5" cols="20" readOnly onClick={ev => ev.target.select()}/>
+                        </div>
                     </div>
                 </fieldset>
             </>

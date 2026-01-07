@@ -146,7 +146,10 @@ export function computeBlueprint({ allProduceUnits, surplusList, produces, beltT
 }
 
 export function generateBlueprint(blueprint) {
-  const bp = new BlueprintBuilder("新蓝图", blueprint);
+  const bp = new BlueprintBuilder(
+    `混带-${blueprint.produce}-${blueprint.produceCount}`,
+    blueprint
+  );
   const str = bp.toStr();
   // 将s加入到剪切板
   // navigator.clipboard.writeText(str);
@@ -556,7 +559,7 @@ class MixedConveyerBeltBlueprint {
   generate() {
     // 找到最长的行
     const maxWidth = this.buildingsRow.map((unit) => unit.reduce((a, b) => a + b.width, 0)).reduce((a, b) => Math.max(a, b), 0);
-    this.height = this.recycleMode === 1 ? ROW_HEIGHT_1 : ROW_HEIGHT_2; // 回收模式为集装分拣器时，高度为11，否则为15
+    this.height = this.recycleMode === 1 ? ROW_HEIGHT_INSERTER : ROW_HEIGHT_4DIR; // 回收模式为集装分拣器时，高度为11，否则为15
     let beginY = this.recycleMode === 1 ? 0 : 1;
     this.matrix = []; // 蓝图坐标矩阵
     this.buildingsRow.forEach((buildings) => {
@@ -712,7 +715,7 @@ class BuildingUnit {
     y += this.factoryInfo.attributes.area[1] * 2;
 
     // 生成输出回路
-    this.generateOutputBelt(beginX, beginY, y, ["z", "x", "y"], "x"); 
+    this.generateOutputBelt(beginX, beginY, y, ["z", "x", "y"], "x");
     // 生成分拣器
     for(const factory of baseFactories) {
       this.generateFactoryInserter(factory, -8);
@@ -1156,7 +1159,7 @@ class BuildingUnit {
     baseFactories.forEach((factory) => {
       this.generateFactoryInserter(factory, -8);
     });
-    
+
   }
 
   // 熔炉、制造台
