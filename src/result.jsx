@@ -638,7 +638,7 @@ export function Result({needs_list, set_needs_list}) {
                                         />
                                     </td>
                                 </tr>
-                                {/* <tr>
+                                <tr>
                                     <td className="d-flex align-items-center text-nowrap">
                                         <span className="ms-auto me-1">层高</span>
                                     </td>
@@ -662,7 +662,7 @@ export function Result({needs_list, set_needs_list}) {
                                             ))}
                                         </select>
                                     </td>
-                                </tr> */}
+                                </tr>
                                 <tr>
                                     <td className="d-flex align-items-center text-nowrap">
                                         <span className="ms-auto me-1">物流站</span>
